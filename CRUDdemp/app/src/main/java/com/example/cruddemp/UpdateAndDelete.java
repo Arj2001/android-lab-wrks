@@ -38,7 +38,6 @@ public class UpdateAndDelete extends AppCompatActivity {
 
         upBtn.setOnClickListener(v->{
             String tabId = tabIdView.getText().toString();
-            Toast.makeText(this,"table id: "+tabId, LENGTH_SHORT).show();
             ContentValues values = new ContentValues();
             values.put("username", textView.getText().toString()); // Assuming "phone_number" is your column name
             int val = db.update("STUDENT",values, "id = ?", new String[]{tabId});

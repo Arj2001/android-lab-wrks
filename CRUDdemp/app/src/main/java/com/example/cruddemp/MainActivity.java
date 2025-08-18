@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
+        viewData();
         viewBtn = findViewById(R.id.button);
         viewBtn.setOnClickListener(v->viewData());
 
