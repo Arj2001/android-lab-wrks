@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="categ_items">
+      <item>Grocery</item>
+      <item>Food</item>
+      <item>Travel</item>
+      <item>Personal</item>
+      <item>Other</item>
+  </string-array>
+</resources>

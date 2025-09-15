@@ -2,11 +2,15 @@ package com.example.expensetrackerproject;
 
 import android.app.DatePickerDialog;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,18 +21,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     Button addBtn;
     TextView amountView;
     TextView dateView;
+    Spinner categView;
+    String categorySelected;
     DataBaseConnection dataBaseConnection = new DataBaseConnection(this);
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    LinearLayout transactionLayout;
+    TableLayout tableLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +47,23 @@ public class MainActivity extends AppCompatActivity {
         addBtn = findViewById(R.id.addBtn);
         amountView = findViewById(R.id.editAmount);
         dateView = findViewById(R.id.editDate);
-        transactionLayout = findViewById(R.id.transcationViewLayout);
+        tableLayout = findViewById(R.id.tableViewLayout);
+        categView = findViewById(R.id.selectCateg);
         viewTransactions();
         dateView.setOnClickListener(v->{
             showDatePicker();
+        });
+
+        categView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                categorySelected = parent.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
 
         addBtn.setOnClickListener(v->{
@@ -55,33 +72,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private TextView createTableTextView(String text){
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+        ));
+//        textView.setTextSize(18); // optional
+//        textView.setPadding(20, 20, 20, 20);
+        textView.setText(text);
+        return textView;
+    }
     private void viewTransactions() {
-        transactionLayout.removeAllViews();
+        tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
         String SQL = "SELECT * FROM expenses";
         Cursor cursor = dataBaseConnection.getReadableDatabase().rawQuery(SQL, null);
-        TextView textView = new TextView(this);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        textView.setTextSize(18); // optional
-        textView.setPadding(20, 20, 20, 20);
+
         if(cursor.getCount() == 0){
-            textView.setText("No Transactions");
-            transactionLayout.addView(textView);
+            tableLayout.addView(createTableTextView("No Transactions"));
             return;
         }
         while(cursor.moveToNext()){
-            TextView transactionDetailsView = new TextView(this);
-            transactionDetailsView.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(new TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT
             ));
-            transactionDetailsView.setTextSize(18); // optional
-            transactionDetailsView.setPadding(20, 20, 20, 20);
-            String val = cursor.getString(1) + "\t\t\t" + cursor.getDouble(2);
-            transactionDetailsView.setText(val);
-            transactionLayout.addView(transactionDetailsView);
+            tableRow.addView(createTableTextView(cursor.getString(1)));
+            tableRow.addView(createTableTextView(cursor.getString(2)));
+            tableRow.addView(createTableTextView(cursor.getString(3)));
+            tableLayout.addView(tableRow);
         }
         cursor.close();
     }
@@ -93,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter all field", Toast.LENGTH_SHORT).show();
             return;
         }
-        dataBaseConnection.addExpenses(date, amount);
+        dataBaseConnection.addExpenses(date, amount, categorySelected);
         viewTransactions();
         Toast.makeText(this, "Expense added successfully", Toast.LENGTH_SHORT).show();
 

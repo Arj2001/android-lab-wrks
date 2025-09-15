@@ -20,7 +20,7 @@ public class DataBaseConnection extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE expenses (id Integer Primary Key Autoincrement, date Text, amount Real)";
+        String CREATE_TABLE = "CREATE TABLE expenses (id Integer Primary Key Autoincrement, date Text, categ Text, amount Real)";
         db.execSQL(CREATE_TABLE);
 
     }
@@ -32,10 +32,10 @@ public class DataBaseConnection extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addExpenses(String date, double amount){
-        String SQL = "INSERT INTO expenses (date, amount) VALUES (?, ?)";
+    public void addExpenses(String date, double amount, String categ){
+        String SQL = "INSERT INTO expenses (date, amount, categ) VALUES (?, ?, ?)";
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(SQL, new Object[]{date, amount});
+        db.execSQL(SQL, new Object[]{date, amount, categ});
         db.close();
     }
 }
