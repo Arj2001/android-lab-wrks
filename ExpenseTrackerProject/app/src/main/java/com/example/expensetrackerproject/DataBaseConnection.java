@@ -3,6 +3,7 @@ package com.example.expensetrackerproject;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -37,5 +38,11 @@ public class DataBaseConnection extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(SQL, new Object[]{date, amount, categ});
         db.close();
+    }
+
+    public Cursor getCategoryExpenses(){
+        String SQL = "SELECT categ, SUM(amount) FROM expenses GROUP BY categ";
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(SQL, null);
     }
 }

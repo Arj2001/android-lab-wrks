@@ -1,6 +1,7 @@
 package com.example.expensetrackerproject;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -68,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
         addBtn.setOnClickListener(v->{
             addExpense();
+        });
+
+        findViewById(R.id.reportBtn).setOnClickListener(v->{
+            Intent intent = new Intent(this, ReportsPage.class);
+            startActivity(intent);
         });
 
     }
