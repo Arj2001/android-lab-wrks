@@ -1,74 +1,68 @@
 package com.example.differentlayouts;
 
-import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.os.Build;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button notifBtn;
-    String channelId = "my_channel_id";
-    String channelName = "App Notification";
-
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this,channelId )
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("New Notification Title")
-            .setContentText("Hey this a notifcation you just created by clicking the button")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setColor(Color.RED);
-
+    Button getDetailsBtn;
+    TextView dataDisp;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main_notification);
+        setContentView(R.layout.activity_main_async);
 
-        createNotificationChannel();
+        getDetailsBtn = findViewById(R.id.getDetailsBtn);
+        dataDisp = findViewById(R.id.dataDisp);
+        progressBar = findViewById(R.id.progressBar);
 
-
-
-        notifBtn = findViewById(R.id.notifcationBtn);
-
-        notifBtn.setOnClickListener(v->{
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                        this,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
-                        101
-                );
-
-            }
-            notificationManager.notify(12, builder.build());
+        getDetailsBtn.setOnClickListener(v -> {
+            new GetData().execute();
         });
 
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(
-                    channelId,
-                    channelName,
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            // Allow vibration for notifications
+    private class GetData extends AsyncTask<Void, Integer, String>{
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(notificationChannel);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(TextView.VISIBLE);
+            progressBar.setProgress(0);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+            dataDisp.setText("Progress: " + values[0] + "%");
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressBar.setVisibility(TextView.GONE);
+            dataDisp.setText(s);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            for (int i = 1; i <= 10; i++) {
+                try {
+                    Thread.sleep(500);  // simulate work
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                publishProgress(i * 10);  // update progress
+            }
+            return "New Data is this:\nLorem ipsum dolor sit amet";
         }
     }
 }
