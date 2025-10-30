@@ -33,7 +33,7 @@ public class DBConnection extends SQLiteOpenHelper {
 
     public void updateStudent(int id, String name, String cls){
         SQLiteDatabase db = this.getWritableDatabase();
-        String update = "UPDATE student SET name = ?,cls = ? WHERE id = ?";
+        String update = "UPDATE student SET name = ?,class = ? WHERE id = ?";
         db.execSQL(update, new Object[]{name, cls, id});
     }
 
@@ -41,6 +41,12 @@ public class DBConnection extends SQLiteOpenHelper {
         SQLiteDatabase db =this.getReadableDatabase();
         String sql = "SELECT * FROM student WHERE id = ?";
         return  db.rawQuery(sql, new String[]{String.valueOf(id)});
+    }
+
+    public void deleteStudent(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("student", "id=?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
     public Cursor getAllStudents(){

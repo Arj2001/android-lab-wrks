@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
         flashBtn = findViewById(R.id.flashBtn);
-        toggleButton = findViewById(R.id.toggleButton);
 
         flashBtn.setOnClickListener(v->{
             toggleTorch();
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         try{
             cameraManager.setTorchMode(cameraId, !isFlashON);
             isFlashON = !isFlashON;
-            Toast.makeText(getApplicationContext(), "Flash is "+isFlashON, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Flash is "+(isFlashON? "ON": "OFF") , Toast.LENGTH_SHORT).show();
         }catch (CameraAccessException e){
             Toast.makeText(getApplicationContext(), "Cannot turn on flash", Toast.LENGTH_LONG).show();
             throw new RuntimeException(e);

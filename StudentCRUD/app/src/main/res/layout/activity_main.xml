@@ -8,16 +8,16 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="287dp"
-        android:layout_height="213dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="183dp"
+        android:layout_height="86dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="4dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.198">
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/addBtn"
@@ -25,17 +25,6 @@
             android:layout_height="wrap_content"
             android:text="ADD" />
 
-        <Button
-            android:id="@+id/updateBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="UPDATE" />
-
-        <Button
-            android:id="@+id/delBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="DELETE" />
     </LinearLayout>
 
     <TextView
@@ -50,17 +39,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:layout_width="354dp"
-        android:layout_height="365dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="398dp"
+        android:layout_height="524dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.659"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TableLayout
                 android:id="@+id/tableView"
@@ -92,6 +82,11 @@
                         android:layout_height="wrap_content"
                         android:text="Class"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
                 </TableRow>
 
             </TableLayout>

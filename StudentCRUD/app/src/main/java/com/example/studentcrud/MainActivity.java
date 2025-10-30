@@ -1,12 +1,17 @@
 package com.example.studentcrud;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         add = findViewById(R.id.addBtn);
-        update = findViewById(R.id.updateBtn);
-        delete = findViewById(R.id.delBtn);
         table = findViewById(R.id.tableView);
         loadData();
         add.setOnClickListener(v->{
@@ -44,6 +47,70 @@ public class MainActivity extends AppCompatActivity {
         return txtView;
     }
 
+    private Button getUpdateBtn(String id){
+        Button update = new Button(this);
+        update.setText("edit");
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                50,
+                TableRow.LayoutParams.WRAP_CONTENT
+        );
+        update.setLayoutParams(params);
+        update.setBackgroundColor(Color.GREEN);
+        update.setPadding(0,0,0,0);
+        update.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, AddStudent.class);
+            intent.putExtra("ID",id);
+            intent.putExtra("EDIT",true);
+            startActivity(intent);
+
+        });
+        return update;
+    }
+
+    private LinearLayout getActionButtons(int id) {
+
+        LinearLayout buttonLayout = new LinearLayout(this);
+        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        Button update = new Button(this);
+        update.setText("edit");
+
+        LinearLayout.LayoutParams updateParams = new LinearLayout.LayoutParams(
+                120,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        update.setLayoutParams(updateParams);
+        update.setBackgroundColor(Color.GREEN);
+        update.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddStudent.class);
+            intent.putExtra("ID", id);
+            startActivity(intent);
+        });
+
+
+        Button delete = new Button(this);
+        delete.setText("delete");
+        LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
+                150,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        deleteParams.setMarginStart(8);
+        delete.setLayoutParams(deleteParams);
+        delete.setBackgroundColor(Color.RED);
+        delete.setOnClickListener(v -> {
+            db.deleteStudent(id);
+            Toast.makeText(this,"Deletion success",LENGTH_SHORT).show();
+            loadData();
+        });
+
+        buttonLayout.addView(update);
+        buttonLayout.addView(delete);
+
+        return buttonLayout;
+    }
+
+
     private void loadData() {
         Cursor cursor = db.getAllStudents();
         table.removeViews(1, table.getChildCount()-1);
@@ -57,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
             row.addView(getTextView(cursor.getString(0)));
             row.addView(getTextView(cursor.getString(1)));
             row.addView(getTextView(cursor.getString(2)));
+            row.addView(getActionButtons(cursor.getInt(0)));
             table.addView(row);
+
         }
         cursor.close();
     }
