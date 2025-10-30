@@ -46,4 +46,25 @@
         android:layout_marginTop="76dp"
         app:layout_constraintStart_toEndOf="@+id/musicProgress"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="236dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="12dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playVideo" />
+
+    <Button
+        android:id="@+id/playVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Play Video"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playMusic" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

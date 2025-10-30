@@ -4,24 +4,25 @@ import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class PlayMusic extends AppCompatActivity {
 
     Button playMusic;
-    MediaPlayer media;
+    MediaPlayer musicMedia;
     ProgressBar progressBar;
     TextView nowTime;
     TextView finalTime;
+    VideoView videoView;
+    Button playVideo;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -33,44 +34,58 @@ public class PlayMusic extends AppCompatActivity {
         progressBar = findViewById(R.id.musicProgress);
         nowTime = findViewById(R.id.nowTime);
         finalTime = findViewById(R.id.fullTime);
+        videoView = findViewById(R.id.videoView);
+        playVideo = findViewById(R.id.playVideo);
+        videoView.setVideoPath(String.valueOf(Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.video)));
 
         playMusic.setOnClickListener(v->{
-            if(media == null) {
-                media = MediaPlayer.create(this, R.raw.song);
-                media.start();
-                finalTime.setText(getTimeInMinutes(media.getDuration()));
+            if(musicMedia == null) {
+                musicMedia = MediaPlayer.create(this, R.raw.song);
+                musicMedia.start();
+                finalTime.setText(getTimeInMinutes(musicMedia.getDuration()));
                 progressBar.setVisibility(VISIBLE);
-                progressBar.setMax(media.getDuration());
+                progressBar.setMax(musicMedia.getDuration());
                 progressBar.setProgress(0);
                 updateProgress();
                 playMusic.setText("Pause");
-                media.setOnCompletionListener(mp -> playMusic.setText("Play"));
+                musicMedia.setOnCompletionListener(mp -> playMusic.setText("Play"));
             }else{
-                if(media.isPlaying()) {
-                    media.pause();
+                if(musicMedia.isPlaying()) {
+                    musicMedia.pause();
                     playMusic.setText("Play");
                 }
                 else {
-                    media.start();
+                    musicMedia.start();
                     updateProgress();
                     playMusic.setText("Pause");
                 }
             }
         });
 
+        playVideo.setOnClickListener(v->{
+            if(videoView.isPlaying()){
+                videoView.setVisibility(VISIBLE);
+                videoView.pause();
+            }else{
+                videoView.start();
+            }
+
+        });
+
+
     }
 
     private void updateProgress() {
         new Thread(() -> {
-            while(media.isPlaying()){
+            while(musicMedia.isPlaying()){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 runOnUiThread(()-> {
-                    progressBar.setProgress(media.getCurrentPosition(), true);
-                    nowTime.setText(getTimeInMinutes(media.getCurrentPosition()));
+                    progressBar.setProgress(musicMedia.getCurrentPosition(), true);
+                    nowTime.setText(getTimeInMinutes(musicMedia.getCurrentPosition()));
                 });
             }
         }).start();
