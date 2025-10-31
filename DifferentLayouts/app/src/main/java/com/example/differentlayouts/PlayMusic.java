@@ -24,6 +24,7 @@ public class PlayMusic extends AppCompatActivity {
     VideoView videoView;
     Button playVideo;
 
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,3 +95,52 @@ public class PlayMusic extends AppCompatActivity {
         return milli/60000+":"+(milli%60000)/1000;
     }
 }
+
+/*
+AIRPLANE MODE
+public class MainActivity extends AppCompatActivity {
+    TextView statusText;
+    AirplaneModeReceiver receiver;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        statusText = findViewById(R.id.statusText); // Register receiver for airplane mode change
+        receiver = new AirplaneModeReceiver(statusText);
+        IntentFilter filter = new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+}
+
+public class AirplaneModeReceiver extends BroadcastReceiver {
+    // Default public constructor (needed for manifest registration)
+    public AirplaneModeReceiver(TextView statusText) {
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
+            boolean isAirplaneModeOn = intent.getBooleanExtra("state", false);
+            if (isAirplaneModeOn) {
+                Toast.makeText(context, "Airplane Mode Enabled", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Airplane Mode Disabled",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}
+
+
+WEB
+
+Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tutorialspoint.com/android/index.htm"));
+*/
+
