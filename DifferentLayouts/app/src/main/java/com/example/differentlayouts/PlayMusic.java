@@ -25,6 +25,7 @@ public class PlayMusic extends AppCompatActivity {
     Button playVideo;
 
 
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,5 +143,52 @@ public class AirplaneModeReceiver extends BroadcastReceiver {
 WEB
 
 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tutorialspoint.com/android/index.htm"));
-*/
 
+OPTIONS
+public class MainActivity extends AppCompatActivity { private View rootLayout;
+    // IDs for context menu items
+    private static final int MENU_RED = 1;
+    private static final int MENU_GREEN = 2;
+    private static final int MENU_BLUE = 3;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        // Get the root layout
+        rootLayout = findViewById(R.id.root_layout);
+        // Register the context menu for rootLayout (or any view you want)
+        registerForContextMenu(rootLayout);
+    }
+        // Create context menu when user long presses
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            menu.setHeaderTitle("Choose Background Color");
+            // Add menu items
+            menu.add(0, MENU_RED, 0, "Red");
+            menu.add(0, MENU_GREEN, 1, "Green");
+            menu.add(0, MENU_BLUE, 2, "Blue");
+        }
+
+    // Handle context menu item clicks
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_RED:
+                rootLayout.setBackgroundColor(Color.RED);
+                return true;
+            case MENU_GREEN:
+                rootLayout.setBackgroundColor(Color.GREEN);
+                return true;
+            case MENU_BLUE:
+                rootLayout.setBackgroundColor(Color.BLUE);
+                return true;
+            default:
+
+                return super.onContextItemSelected(item);
+        }
+    }
+}
+
+*/
